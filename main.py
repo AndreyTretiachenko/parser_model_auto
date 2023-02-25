@@ -37,11 +37,13 @@ def main():
             m = model.find('div', class_="car-info car-info--catalogs").find('div', class_='car-info__car-name').text
             years = model.find('div', class_="car-info car-info--catalogs").find('div',
                                                                                                             class_='car-info__car-years').text
-            if m or years:
+            if (m and years) and (m != '' and years != ''):
+                print(m, years.split(' ')[0])
                 brand['modelList'].append({
                     'model': m,
-                    'years':  years,
+                    'years':  int(years.split(' ')[0]),
                 })
+            brand['modelList'] = [dict(s) for s in set(frozenset(d.items()) for d in brand['modelList'])]
     with open('cars.json', 'w') as file:
         file.write(json.dumps(listBrand))
 
