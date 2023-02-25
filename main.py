@@ -31,7 +31,7 @@ def main():
             'modelList': []
         })
     for brand in listBrand:
-        r = requests.get('https://www.exist.ru/'+brand['link'], headers=headers)
+        r = requests.get('https://www.exist.ru/'+brand['link']+'?all=1', headers=headers)
         modelList = BeautifulSoup(r.text, 'lxml').find('div', {'id': 'models'}).find_all('div', class_="cell2")
         for model in modelList:
             m = model.find('div', class_="car-info car-info--catalogs").find('div', class_='car-info__car-name').text
@@ -44,6 +44,7 @@ def main():
                     'years':  int(years.split(' ')[0]),
                 })
             brand['modelList'] = [dict(s) for s in set(frozenset(d.items()) for d in brand['modelList'])]
+
     with open('cars.json', 'w') as file:
         file.write(json.dumps(listBrand))
 
